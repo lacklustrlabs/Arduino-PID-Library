@@ -33,6 +33,9 @@ void setup()
 {
   windowStartTime = millis();
 
+  // Set RELAY_PIN as output
+  pinMode(RELAY_PIN,OUTPUT);
+  
   //initialize the variables we're linked to
   Setpoint = 100;
 
