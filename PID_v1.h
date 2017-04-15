@@ -12,7 +12,7 @@
 enum Mode {MANUAL=0,AUTOMATIC=1};
 enum Direction {DIRECT=0,REVERSE=1};
 
-template <typename T>
+template <typename T, const int MINLIMIT=0, const int MAXLIMIT=255, const unsigned long SAMPLETIME=100>
 class PIDT
 {
     // prevent strange errors due to implicit conversions etc.
@@ -33,10 +33,10 @@ class PIDT
             myOutput(Output), myInput(Input), mySetpoint(Setpoint), inAuto(false)
     {
 
-        SetOutputLimits(0, 255);               //default output limit corresponds to
+        SetOutputLimits(MINLIMIT, MAXLIMIT);   //default output limit corresponds to
                                                //the arduino pwm limits
 
-        SampleTime = 100;                      //default Controller Sample Time is 0.1 seconds
+        SampleTime = SAMPLETIME;               //default Controller Sample Time is 0.1 seconds
 
         SetControllerDirection(ControllerDirection);
         SetTunings(Kp, Ki, Kd);
