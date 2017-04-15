@@ -42,6 +42,7 @@ class PIDT
         SetTunings(Kp, Ki, Kd);
 
         lastTime = millis()-SampleTime;
+        Initialize();
     }
 
 
@@ -213,16 +214,16 @@ class PIDT
 	T dispKi;				//   format for display purposes
 	T dispKd;				//
     
-	T kp;                  // * (P)roportional Tuning Parameter
-    T ki;                  // * (I)ntegral Tuning Parameter
-    T kd;                  // * (D)erivative Tuning Parameter
+	T kp;                   // * (P)roportional Tuning Parameter
+    T ki;                   // * (I)ntegral Tuning Parameter
+    T kd;                   // * (D)erivative Tuning Parameter
 
 	Direction controllerDirection;
 
-    T *myInput;              // * Pointers to the Input, Output, and Setpoint variables
-    T *myOutput;             //   This creates a hard link between the variables and the
-    T *mySetpoint;           //   PID, freeing the user from having to constantly tell us
-                                  //   what these values are.  with pointers we'll just know.
+    T *myInput;             // * Pointers to the Input, Output, and Setpoint variables
+    T *myOutput;            //   This creates a hard link between the variables and the
+    T *mySetpoint;          //   PID, freeing the user from having to constantly tell us
+                            //   what these values are.  with pointers we'll just know.
 			  
 	unsigned long lastTime;
 	T ITerm, lastInput;
