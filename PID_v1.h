@@ -7,7 +7,7 @@
 
 #ifndef PID_v1_h
 #define PID_v1_h
-#define LIBRARY_VERSION	1.1.2
+#define LIBRARY_VERSION    1.1.2
 
 enum Mode {MANUAL=0,AUTOMATIC=1};
 enum Direction {DIRECT=0,REVERSE=1};
@@ -183,18 +183,18 @@ class PIDT
        controllerDirection = direction;
     }
 
-										  
-	/* Status Funcions*************************************************************
-	 * Just because you set the Kp=-1 doesn't mean it actually happened.  these
-	 * functions query the internal state of the PID.  they're here for display
-	 * purposes.  this are the functions the PID Front-end uses for example
-	 ******************************************************************************/
 
-	T GetKp(){ return  dispKp; }
-	T GetKi(){ return  dispKi;}
-	T GetKd(){ return  dispKd;}
-	int GetMode(){ return  inAuto ? AUTOMATIC : MANUAL;}
-	int GetDirection(){ return controllerDirection;}
+    /* Status Funcions*************************************************************
+     * Just because you set the Kp=-1 doesn't mean it actually happened.  these
+     * functions query the internal state of the PID.  they're here for display
+     * purposes.  this are the functions the PID Front-end uses for example
+     ******************************************************************************/
+
+    T GetKp(){ return  dispKp; }
+    T GetKi(){ return  dispKi;}
+    T GetKd(){ return  dispKd;}
+    int GetMode(){ return  inAuto ? AUTOMATIC : MANUAL;}
+    int GetDirection(){ return controllerDirection;}
 
   private:
     /* Initialize()****************************************************************
@@ -209,28 +209,28 @@ class PIDT
        if(ITerm > outMax) ITerm = outMax;
        else if(ITerm < outMin) ITerm = outMin;
     }
-	
-	T dispKp;				// * we'll hold on to the tuning parameters in user-entered
-	T dispKi;				//   format for display purposes
-	T dispKd;				//
-    
-	T kp;                   // * (P)roportional Tuning Parameter
+
+    T dispKp;               // * we'll hold on to the tuning parameters in user-entered
+    T dispKi;               //   format for display purposes
+    T dispKd;               //
+
+    T kp;                   // * (P)roportional Tuning Parameter
     T ki;                   // * (I)ntegral Tuning Parameter
     T kd;                   // * (D)erivative Tuning Parameter
 
-	Direction controllerDirection;
+    Direction controllerDirection;
 
     T *myInput;             // * Pointers to the Input, Output, and Setpoint variables
     T *myOutput;            //   This creates a hard link between the variables and the
     T *mySetpoint;          //   PID, freeing the user from having to constantly tell us
                             //   what these values are.  with pointers we'll just know.
-			  
-	unsigned long lastTime;
-	T ITerm, lastInput;
 
-	unsigned long SampleTime;
-	T outMin, outMax;
-	bool inAuto;
+    unsigned long lastTime;
+    T ITerm, lastInput;
+
+    unsigned long SampleTime;
+    T outMin, outMax;
+    bool inAuto;
 };
 
 typedef PIDT<double> PID;
