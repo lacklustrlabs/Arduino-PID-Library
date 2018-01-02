@@ -36,6 +36,8 @@ class PIDT
         SetOutputLimits(MINLIMIT, MAXLIMIT);   //default output limit corresponds to
                                                //the arduino pwm limits
 
+		mapOutput = false;
+		
         SampleTime = SAMPLETIME;               //default Controller Sample Time is 0.1 seconds
 
         SetControllerDirection(ControllerDirection);
@@ -75,6 +77,11 @@ class PIDT
 
           if(output > outMax) output = outMax;
           else if(output < outMin) output = outMin;
+		  
+		  if(mapOutput) {
+			 output = map(output, outMin, outMax, mapMin, mapMax);
+		  }
+		  
           *myOutput = output;
 
           /*Remember some variables for next time*/
@@ -128,9 +135,9 @@ class PIDT
     }
 
     /* SetOutputLimits(...)****************************************************
-     *     This function will be used far more often than SetInputLimits.  while
-     *  the input to the controller will generally be in the 0-1023 range (which is
-     *  the default already,)  the output will be a little different.  maybe they'll
+     *  This function will be used far more often than SetInputLimits. While
+     *  the input to the controller will generally be in the 0-1023 range,
+	 *	the output will be a little different (0-255 by default). Maybe they'll
      *  be doing a time window and will need 0-8000 or something.  or maybe they'll
      *  want to clamp it from 0-125.  who knows.  at any rate, that can all be done
      *  here.
@@ -151,6 +158,20 @@ class PIDT
            else if(ITerm < outMin) ITerm= outMin;
        }
     }
+	
+   /* SetOutputMapping(...)****************************************************
+    * 	This function will alter the output to be mapped to selected range. For example, if user wants
+	*	to have output mapped to (0-1500) or other range using map(x, lowLimit, highLimit, newLow, newHigh)
+	*	which is useful for relay switching. map will be applied at the end of the Compute() method.
+    **************************************************************************/
+
+   void SetOutputMapping(T newLow, T newHigh)
+   {
+      if(newLow >= newHigh) return;
+      mapMin = newLow;
+      mapMax = newHigh;
+	  mapOutput = true;
+   }
 
     /* SetMode(...)****************************************************************
      * Allows the controller Mode to be set to manual (0) or Automatic (non-zero)
@@ -232,8 +253,8 @@ class PIDT
     T ITerm, lastInput;
 
     unsigned long SampleTime;
-    T outMin, outMax;
-    bool inAuto;
+    T outMin, outMax, mapMin, mapMax;
+    bool inAuto, mapOutput;
 };
 
 typedef PIDT<double> PID;
