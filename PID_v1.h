@@ -43,6 +43,9 @@ class PIDT
 
         lastTime = millis()-SampleTime;
         Initialize();
+		
+		//turn on by default
+		SetMode(AUTOMATIC);
     }
 
 
