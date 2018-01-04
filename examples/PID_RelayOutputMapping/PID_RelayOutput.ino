@@ -5,21 +5,13 @@
  * a relay.  the pid is designed to Output an analog value,
  * but the relay can only be On/Off.
  *
- * To connect them together we use "time proportioning
+ *   to connect them together we use "time proportioning
  * control"  it's essentially a really slow version of PWM.
  * first we decide on a window size (5000mS say.) we then
  * set the pid to adjust its output between 0 and that window
  * size.  lastly, we add some logic that translates the PID
  * output into "Relay On Time" with the remainder of the
  * window being "Relay Off Time"
- *
- * This version, uses SetOutputMapping method, not only to cut off
- * low and high output values, but also map the original range 0-255
- * to our time window (0-windowSize) which is based on my experience
- * and couple of tests, working better than original example, when the
- * window is much larger than maxOutput.
- * Also, it counts on default SetMode(AUTOMATIC) setting, which is moved
- * to constructor as it's by default what we want.
  ********************************************************/
 
 #include <PID_v1.h>
@@ -47,9 +39,11 @@ void setup()
   //initialize the variables we're linked to
   Setpoint = 100;
 
-  //tell the PID to map between 0 and the full window size
-  myPID.SetOutputMapping(0, WindowSize);
+  //tell the PID to range between 0 and the full window size
+  myPID.SetOutputLimits(0, WindowSize);
 
+  //turn the PID on
+  myPID.SetMode(AUTOMATIC);
 }
 
 void loop()
@@ -64,8 +58,6 @@ void loop()
   { //time to shift the Relay Window
     windowStartTime += WindowSize;
   }
-  
-  //output is already between 0 and WindowSize.
   if (Output < millis() - windowStartTime) digitalWrite(RELAY_PIN, HIGH);
   else digitalWrite(RELAY_PIN, LOW);
 
